@@ -1,0 +1,6 @@
+source 'https://rubygems.org'
+
+gem "onnxruntime"
+gem "mini_magick"
+gem "numo-narray"
+gem "chunky_png"
