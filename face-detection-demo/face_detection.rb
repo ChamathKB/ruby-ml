@@ -1,11 +1,9 @@
 require "onnxruntime"
 require "mini_magick"
 require "numo/narray"
-# require "chunky_png"
+#require "chunky_png"
+#require "opencv"
 
-def load_image(image_path)
-  MiniMagick::Image.open(image_path)
-end
 
 def load_model(model_path)
   OnnxRuntime::Model.new(model_path)
@@ -60,6 +58,10 @@ def save_labeled_image(img, output_path)
   img.write(output_path)
 end
 
+## With minimagic gem
+def load_image(image_path)
+  MiniMagick::Image.open(image_path)
+end
 
 def preprocess_image(image, target_shape)
   img = image.dup # Duplicate the image to avoid modifying the original
@@ -99,9 +101,39 @@ end
 #   pixels
 # end
 
+## With OpenCV gem
+# def load_image(image_path)
+#     OpenCV::CvMat.load(image_path)
+# end    
+
+# def preprocess_image(orig_image, threshold = 0.7)
+#   # Convert BGR to RGB
+#   image = orig_image.bgr2rgb
+
+#   # Resize the image to (640, 480)
+#   image = image.resize(640, 480)
+
+#   # Set image mean
+#   image_mean = Numo::NArray[127, 127, 127]
+
+#   # Normalize and transpose the image
+#   image = (image - image_mean) / 128
+#   image = image.transpose(2, 0, 1)
+
+#   # Add batch dimension
+#   image = image.expand_dims(0)
+
+#   # Convert image to float32
+#   image = image.astype(Numo::SFloat)
+
+#   # Example usage:
+#   # Assuming `orig_image` is an OpenCV image (CvMat) loaded using OpenCV, you can use the function like this:
+#   # processed_image = face_detector(orig_image)
+#   return image
+# end
 
 begin
-  image_path = './data/face.jpeg'
+  image_path = './data/faces.jpg'
   model_path = './models/version-RFB-640.onnx'
   output_path = 'detected.jpg'
 
